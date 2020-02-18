@@ -1,0 +1,25 @@
+{
+  "name": "learning-management-system",
+  "version": "1.0.0",
+  "description": "Learning Management System (PayPal VAP 2020 Mini-Project 1)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agranya99/Learning-Management-System.git"
+  },
+  "author": "Agranya Pratap Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agranya99/Learning-Management-System/issues"
+  },
+  "homepage": "https://github.com/agranya99/Learning-Management-System#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "joi": "^14.3.1",
+    "lodash": "^4.17.15",
+    "nodemon": "^2.0.2"
+  }
+}

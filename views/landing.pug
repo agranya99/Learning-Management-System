@@ -1,0 +1,22 @@
+html
+    body
+        div.container
+            h1 Learning Management System
+            span(style="color: red") #{message}
+            div
+                h3 Login
+                form(action="/login" method="POST")
+                    table
+                        tr
+                            td
+                                span Username:
+                            td 
+                                input(type="text" name="username")
+                        tr
+                            td
+                                span Password:
+                            td
+                                input(type="password", name="password")
+                        tr
+                            td(colspan=2)
+                                input(type="submit", value="Login")

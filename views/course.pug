@@ -1,0 +1,91 @@
+html
+    body
+        div.container
+            div.row
+                div
+                    form(action="/home", method="post")
+                        input(type='text' name='auth_token' value=auth_token hidden)
+                        input(type="submit", value="Back")
+                div
+                    form(action="/logout", method="post")
+                        input(type='text' name='auth_token' value=auth_token hidden)
+                        input(type="submit", value="Logout")
+            div
+                h1 Learning Management System
+                span(style='color: red') #{message}
+                div
+                    h2 #{courseDesc} (#{courseCode})
+                    table(style="padding:10px;")
+                        tr
+                            td
+                                span <b>Professors Taking The Course
+                            td
+                                span #{courseProfs}
+                        tr
+                            td
+                                span <b>Start Date
+                            td
+                                span #{courseStartDate}
+                        tr
+                            td
+                                span <b>Status
+                            td
+                                span #{status}
+                        tr
+                            td
+                                span <b>Number of registrations
+                            td
+                                span #{numberRegistered}
+                        tr
+                            td(colspan = 2)
+                                span <b> Registered Students
+                        tr
+                            td
+                                span <b>Faculty
+                            td
+                                span <b>Students
+                        if registeredStudents
+                            each arr, index in registeredStudents
+                                tr
+                                    td
+                                        span #{index}
+                                    td
+                                        each val in arr
+                                            span #{val} . 
+
+                    if designation == 1
+                        if registeredFaculty
+                            form(action="/delete", method="post")
+                                input(value=auth_token name="auth_token" hidden)
+                                input(value=courseCode name="courseCode" hidden)
+                                input(value=courseProfs name="courseProfs" hidden)
+                                input(type="submit", value="Delete Course")
+                        else
+                            unless courseCommenced
+                                form(action="/participate", method="post")
+                                    input(value=auth_token name="auth_token" hidden)
+                                    input(value=courseCode name="courseCode" hidden)
+                                    input(type="submit", value="Take Up This Course")
+                    else 
+                        unless courseCommenced
+                            if enrolled
+                                table(style="padding:10px;")
+                                    tr
+                                        td 
+                                            span <b>Your Faculty 
+                                        td
+                                            span #{yourProf}
+
+                                form(action="/unsubscribe", method="post")
+                                    input(value=auth_token name="auth_token" hidden)
+                                    input(value=courseCode name="courseCode" hidden)
+                                    input(type="submit", value="Un-Subscribe From The Course")
+                            else
+                                    form(action="/subscribe", method="post")
+                                        input(value=auth_token name="auth_token" hidden)
+                                        input(value=courseCode name="courseCode" hidden)
+                                        select(name="prof")
+                                            option(disabled selected) Select a professor
+                                                each professor in courseProfs
+                                                    option(value=professor) #{professor}
+                                        input(type="submit", value="Subscribe To The Course")

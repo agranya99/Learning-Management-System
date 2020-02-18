@@ -1,0 +1,190 @@
+html
+    body
+        div.container
+            div
+                form(action="/logout", method="post")
+                    input(type='text' name='auth_token' value=auth_token hidden)
+                    input(type="submit", value="Logout")
+            h1 Learning Management System
+            span Hello #{name}!
+            span(style='color: red') #{message}
+            if designation == 2
+                div
+                    h4 Create New User Record
+                    form(action="/addUser", method="post")
+                        input(type="text", name="auth_token" value=auth_token hidden)
+                        table
+                            tr
+                                td
+                                    span Name: 
+                                td
+                                    input(type="text" name="name")
+                            tr
+                                td
+                                    span UserID: 
+                                td
+                                    input(type="text" name="username")
+                            tr
+                                td
+                                    span Password:
+                                td
+                                    input(type="password", name="password")
+                            tr
+                                td
+                                    span Role
+                                td
+                                    select(name="designation")
+                                        option(value="0" selected) Student
+                                        option(value="1") Faculty
+                            tr 
+                                td(colspan=2)
+                                    input(type="submit", value="Create User")
+
+                div
+                    h4 Delete User Record
+                    if userList.length
+                        form(action="/delUser", method="post")
+                            input(type="text", name="auth_token" value=auth_token hidden)
+                            table
+                            tr
+                                td
+                                    select(name="userId")
+                                        option(disabled selected) Select a User
+                                        each user in userList
+                                            option(value=user.userId) #{user.userId} - #{user.userName}
+                            tr 
+                                td(colspan=2)
+                                    input(type="submit", value="Delete User")
+                div
+                    h4 Courses' Details
+                    table(style='width:100%', border='1')
+                        tr
+                            th 
+                                span Code
+                            th 
+                                span Description
+                            th 
+                                span Duration (in Months)
+                            th 
+                                span Registrations ('Faculty': ['student'..])
+                        each course in courseList
+                            tr
+                                td
+                                    span #{course.courseCode}
+                                td
+                                    span #{course.courseDesc}
+                                td
+                                    span #{course.courseDuration}
+                                td
+                                    span #{course.registrations}
+
+
+            else if designation == 1
+                div 
+                    h4 Create a Course
+                    form(action="/add", method="post")
+                        input(type='text' name='auth_token' value=auth_token hidden)
+                        table
+                            tr
+                                td
+                                    span Course Code
+                                td  
+                                    input(type="text", name="courseCode")
+                            tr
+                                td
+                                    span Course Name
+                                td
+                                    input(type="text", name="courseDesc")
+                            tr
+                                td
+                                    span Starting Date
+                                td  
+                                    input(type="date", name="courseStartDate")
+                            tr
+                                td
+                                    span Duration (in Months)
+                                td  
+                                    input(type="number", name="courseDuration")
+                            tr
+                                td(colspan=2)
+                                    input(type="submit", value="Create")
+                div
+                    h4 My Courses
+                    if registeredCourseList.length
+                        form(action="/course", method="post")
+                            input(type="text", name="auth_token" value=auth_token hidden)
+                            table
+                                tr
+                                    td
+                                        select(name="courseCode")
+                                            option(disabled selected) Select a course
+                                            each course in registeredCourseList
+                                                option(value=course.courseCode) #{course.courseDesc}
+                                    td
+                                        input(type="submit", value="Get Details")
+                        ul
+                            each course in registeredCourseList
+                                li #{course.courseDesc}
+                    else
+                        span No courses found
+
+                div
+                    h4 All Courses
+                    if courseList.length
+                        form(action="/course", method="post")
+                            input(type="text", name="auth_token" value=auth_token hidden)
+                            table
+                                tr
+                                    td
+                                        select(name="courseCode")
+                                            option(disabled selected) Select a course
+                                            each course in courseList
+                                                option(value=course.courseCode) #{course.courseDesc}
+                                    td 
+                                        input(type="submit", value="Get Details")
+                        ul
+                            each course in courseList
+                                li #{course.courseDesc}
+                    else
+                        span No courses found
+
+            else
+                div
+                    h4 My Courses
+                    if registeredCourseList.length
+                        form(action="/course", method="post")
+                            input(type="text", name="auth_token" value=auth_token hidden)
+                            table
+                                tr
+                                    td
+                                        select(name="courseCode")
+                                            option(disabled selected) Select a course
+                                            each course in registeredCourseList
+                                                option(value=course.courseCode) #{course.courseDesc}
+                                    td
+                                        input(type="submit", value="Get Details")
+                        ul
+                            each course in registeredCourseList
+                                li #{course.courseDesc}
+                    else
+                        span No courses found
+
+                div
+                    h4 All Courses
+                    if courseList.length
+                        form(action="/course", method="post")
+                            input(type="text", name="auth_token" value=auth_token hidden)
+                            table
+                                tr
+                                    td
+                                        select(name="courseCode")
+                                            option(disabled selected) Select a course
+                                            each course in courseList
+                                                option(value=course.courseCode) #{course.courseDesc}
+                                    td
+                                        input(type="submit", value="Get Details")
+                        ul
+                            each course in courseList
+                                li #{course.courseDesc}
+                    else
+                        span No courses found
