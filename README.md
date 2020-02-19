@@ -9,6 +9,21 @@ A system developed using `Node.Js` and `Pug` for universities to facilitate mana
 * Run `npm install` to install the dependencies
 * Run `nodemon .\server.js` or `node .\server.js` to start a server instance of the project
 
+## Dummy Data
+
+| username | password | designation |
+|----------|----------|-------------|
+| admin    | 1234     | Admin [2]   |
+| faculty1 | 1234     | Faculty [1] |
+| faculty2 | 1234     | Faculty [1] |
+| faculty3 | 1234     | Faculty [1] |
+| student1 | 1234     | Student [0] |
+| student2 | 1234     | Student [0] |
+| student3 | 1234     | Student [0] |
+| student4 | 1234     | Student [0] |
+| student5 | 1234     | Student [0] |
+
+
 ## Concepts Applied
 
 * **express.js** - web app framework
