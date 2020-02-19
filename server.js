@@ -1,11 +1,11 @@
 const express = require('express')
 const joi = require('joi')
-const app = express()
 var _ = require('lodash');
 
+const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.use(express.static('./public'))
+
 
 app.set('views', './views')
 app.set('view engine', 'pug')
@@ -271,7 +271,9 @@ app.post('/login', (req, res) => {
                         if (result.nogui) {
                             res.send(responseData)
                         }
-                        res.render('home', responseData)
+                        else {
+                            res.render('home', responseData)
+                        }
                     }
                 })
                 .catch(() => {
@@ -294,7 +296,12 @@ app.post('/addUser', (req, res) => {
                     var responseData = homeRenderData(sessions[result.auth_token])
                     responseData['auth_token'] = result.auth_token
                     responseData['message'] = "A user with the same 'username' aleady exists."
-                    res.render('home', responseData)
+                    if (result.nogui) {
+                        res.send(responseData)
+                    }
+                    else {
+                        res.render('home', responseData)
+                    }
                 },
                     () => {
                         // All OK 
@@ -309,7 +316,12 @@ app.post('/addUser', (req, res) => {
                         var responseData = homeRenderData(sessions[result.auth_token])
                         responseData['auth_token'] = result.auth_token
                         responseData['message'] = "Successfully added user to Database."
-                        res.render('home', responseData)
+                        if (result.nogui) {
+                            res.send(responseData)
+                        }
+                        else {
+                            res.render('home', responseData)
+                        }
                     })
         })
         .catch((error) => {
@@ -317,7 +329,12 @@ app.post('/addUser', (req, res) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = error.details[0].message
-            res.render('home', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('home', responseData)
+            }
         })
 })
 
@@ -332,7 +349,12 @@ app.post('/delUser', (req, res) => {
                     // check if user is student / faculty
                     if (user_details[sessions[result.auth_token]]['designation'] == 0 || user_details[sessions[result.auth_token]]['designation'] == 1) {
                         var responseData = { 'message': "Oops! How did you land here? Your designation doesn't support this feature." }
-                        res.render('landing', responseData)
+                        if (result.nogui) {
+                            res.send(responseData)
+                        }
+                        else {
+                            res.render('landing', responseData)
+                        }
                     } else {
                         // removing registrations (if any)
                         // if it is a faculty
@@ -368,7 +390,12 @@ app.post('/delUser', (req, res) => {
                         var responseData = homeRenderData(sessions[result.auth_token])
                         responseData['auth_token'] = result.auth_token
                         responseData['message'] = "Successfully deleted user account."
-                        res.render('home', responseData)
+                        if (result.nogui) {
+                            res.send(responseData)
+                        }
+                        else {
+                            res.render('home', responseData)
+                        }
                     }
                 })
                 .catch(() => {
@@ -376,7 +403,12 @@ app.post('/delUser', (req, res) => {
                     var responseData = homeRenderData(sessions[result.auth_token])
                     responseData['auth_token'] = result.auth_token
                     responseData['message'] = "User doesn't exist in the Database."
-                    res.render('home', responseData)
+                    if (result.nogui) {
+                        res.send(responseData)
+                    }
+                    else {
+                        res.render('home', responseData)
+                    }
                 })
         })
         .catch((error) => {
@@ -384,7 +416,12 @@ app.post('/delUser', (req, res) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = error.details[0].message
-            res.render('home', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('home', responseData)
+            }
         })
 })
 
@@ -398,7 +435,12 @@ app.post('/logout', (req, res) => {
             var responseData = {
                 'message': "Logged out."
             }
-            res.render('landing', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('landing', responseData)
+            }
         })
         .catch(() => {
             res.render('landing', {'message': "Session Doesn't Exist"})
@@ -501,14 +543,24 @@ app.post('/course', (req, res) => {
                     var responseData = homeRenderData(sessions[result.auth_token])
                     responseData['auth_token'] = result.auth_token
                     responseData['message'] = "Course Code doesn't exist in the Database."
-                    res.render('home', responseData)
+                    if (result.nogui) {
+                        res.send(responseData)
+                    }
+                    else {
+                        res.render('home', responseData)
+                    }
                 })         
         })
         .catch((error) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = "Select a valid option!"
-            res.render('home', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('home', responseData)
+            }
         })   
 })
 
@@ -521,7 +573,12 @@ app.post('/add', (req, res) => {
                 var responseData = homeRenderData(sessions[result.auth_token])
                 responseData['auth_token'] = result.auth_token
                 responseData['message'] = "Oops! How did you land here? Your designation doesn't support this feature."
-                res.render('home', responseData)
+                if (result.nogui) {
+                    res.send(responseData)
+                }
+                else {
+                    res.render('home', responseData)
+                }
             }
             else {
                 // check if course code is in courses 
@@ -538,7 +595,12 @@ app.post('/add', (req, res) => {
                         var responseData = homeRenderData(sessions[result.auth_token])
                         responseData['auth_token'] = result.auth_token
                         responseData['message'] = message
-                        res.render('home', responseData)
+                        if (result.nogui) {
+                            res.send(responseData)
+                        }
+                        else {
+                            res.render('home', responseData)
+                        }
                     })
                     //otherwise
                     .catch(() => {
@@ -552,7 +614,12 @@ app.post('/add', (req, res) => {
                         var responseData = homeRenderData(sessions[result.auth_token])
                         responseData['auth_token'] = result.auth_token
                         responseData['message'] = "Successfully created the course."
-                        res.render('home', responseData)
+                        if (result.nogui) {
+                            res.send(responseData)
+                        }
+                        else {
+                            res.render('home', responseData)
+                        }
                     })
             }
         })
@@ -560,7 +627,12 @@ app.post('/add', (req, res) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = error.details[0].message
-            res.render('home', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('home', responseData)
+            }
         })
 })
 
@@ -581,7 +653,12 @@ app.post('/delete', (req, res) => {
                             var responseData = homeRenderData(sessions[result.auth_token])
                             responseData['auth_token'] = result.auth_token
                             responseData['message'] = "You are not authorized to delete the course - You are not a registered faculty for the course."
-                            res.render('home', responseData)
+                            if (result.nogui) {
+                                res.send(responseData)
+                            }
+                            else {
+                                res.render('home', responseData)
+                            }
                         }
                         else {
                             //if this is the only professor taking the course
@@ -609,7 +686,12 @@ app.post('/delete', (req, res) => {
                             var responseData = homeRenderData(sessions[result.auth_token])
                             responseData['auth_token'] = result.auth_token
                             responseData['message'] = message
-                            res.render('home', responseData)
+                            if (result.nogui) {
+                                res.send(responseData)
+                            }
+                            else {
+                                res.render('home', responseData)
+                            }
                         }
                     }
                 })
@@ -618,12 +700,22 @@ app.post('/delete', (req, res) => {
                     var responseData = homeRenderData(sessions[result.auth_token])
                     responseData['auth_token'] = result.auth_token
                     responseData['message'] = "Course Code doesn't exist in the Database."
-                    res.render('home', responseData)
+                    if (result.nogui) {
+                        res.send(responseData)
+                    }
+                    else {
+                        res.render('home', responseData)
+                    }
                 })
         })
         .catch(() => {
             var responseData = { 'message': "Oops! Something went wrong. Please Try Again." }
-            res.render('landing', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('landing', responseData)
+            }
         })
 })
 
@@ -633,7 +725,12 @@ app.post('/participate', (req, res) => {
         .then((result) => {
             if (user_details[sessions[result.auth_token]]['designation'] == 0) {
                 var responseData = { 'message': "Oops! How did you land here? Your designation doesn't support this feature." }
-                res.render('landing', responseData)
+                if (result.nogui) {
+                    res.send(responseData)
+                }
+                else {
+                    res.render('landing', responseData)
+                }
             }
             else {
                 // check if course code is in courses 
@@ -654,12 +751,22 @@ app.post('/participate', (req, res) => {
                 var responseData = homeRenderData(sessions[result.auth_token])
                 responseData['auth_token'] = result.auth_token
                 responseData['message'] = message
-                res.render('home', responseData)
+                if (result.nogui) {
+                    res.send(responseData)
+                }
+                else {
+                    res.render('home', responseData)
+                }
             }
         })
         .catch((error) => {
             var responseData = { 'message': "Oops! Something went wrong. Please Try Again." }
-            res.render('landing', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('landing', responseData)
+            }
         })
 })
 
@@ -674,7 +781,12 @@ app.post('/subscribe', (req, res) => {
                     // check if user is admin
                     if (user_details[sessions[result.auth_token]]['designation'] == 1) {
                         var responseData = { 'message': "Oops! How did you land here? Your designation doesn't support this feature." }
-                        res.render('landing', responseData)
+                        if (result.nogui) {
+                            res.send(responseData)
+                        }
+                        else {
+                            res.render('landing', responseData)
+                        }
                     } else {
                         // check if course has started
                         if (new Date() > course_details[result.courseCode]['startDate']) {
@@ -701,7 +813,12 @@ app.post('/subscribe', (req, res) => {
                         var responseData = homeRenderData(sessions[result.auth_token])
                         responseData['auth_token'] = result.auth_token
                         responseData['message'] = message
-                        res.render('home', responseData)
+                        if (result.nogui) {
+                            res.send(responseData)
+                        }
+                        else {
+                            res.render('home', responseData)
+                        }
                     }
                 })
                 .catch(() => {
@@ -709,14 +826,24 @@ app.post('/subscribe', (req, res) => {
                     var responseData = homeRenderData(sessions[result.auth_token])
                     responseData['auth_token'] = result.auth_token
                     responseData['message'] = "Course Code doesn't exist in the Database."
-                    res.render('home', responseData)
+                    if (result.nogui) {
+                        res.send(responseData)
+                    }
+                    else {
+                        res.render('home', responseData)
+                    }
                 })
         })
         .catch((error) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = "Oops! Try Again. You need to select a faculty for subscribing to a course."
-            res.render('home', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('home', responseData)
+            }
         })
 })
 
@@ -727,12 +854,22 @@ app.post('/unsubscribe', (req, res) => {
             // check if course code does not exist in courses
             if (!(result.courseCode in course_details)) {
                 var responseData = { 'message': "Course Code doesn't exist in the Database." }
-                res.render('landing', responseData)
+                if (result.nogui) {
+                    res.send(responseData)
+                }
+                else {
+                    res.render('landing', responseData)
+                }
             } else {
                 // check if user is admin
                 if (user_details[sessions[result.auth_token]]['designation'] == 1) {
                     var responseData = { 'message': "Oops! How did you land here? Your designation doesn't support this feature." }
-                    res.render('landing', responseData)
+                    if (result.nogui) {
+                        res.send(responseData)
+                    }
+                    else {
+                        res.render('landing', responseData)
+                    }
                 } else {
                     // check if course has started
                     if (new Date() > course_details[result.courseCode]['startDate']) {
@@ -757,17 +894,29 @@ app.post('/unsubscribe', (req, res) => {
                     var responseData = homeRenderData(sessions[result.auth_token])
                     responseData['auth_token'] = result.auth_token
                     responseData['message'] = message
-                    res.render('home', responseData)
+                    if (result.nogui) {
+                        res.send(responseData)
+                    }
+                    else {
+                        res.render('home', responseData)
+                    }
                 }
             }
         })
         .catch(() => {
             var responseData = { 'message': "Oops! Something went wrong. Please Try Again." }
-            res.render('landing', responseData)
+            if (result.nogui) {
+                res.send(responseData)
+            }
+            else {
+                res.render('landing', responseData)
+            }
         })
 })
 
 app.get('/', (req, res) => {
+    var responseData = { 'available endpoints': ['/login', '/addUser', '/delUser', '/logout', '/course', '/add', '/delete', '/participate', '/subscribe', '/unsubscribe'] }
+    res.send(responseData)
     res.render('landing')
 })
 
@@ -776,7 +925,7 @@ app.get('*', (req, res) => {
 })
 
 app.post('*', (req, res) => {
-    res.status(404).send({message: "Requested URL not found."})
+    res.status(404).send({ message: "Requested URL not found.", 'available endpoints': ['/login', '/addUser', '/delUser', '/logout', '/course', '/add', '/delete', '/participate', '/subscribe', '/unsubscribe']})
 })
 
 app.listen(portNumber)
