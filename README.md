@@ -73,4 +73,52 @@ The `course` page for student
 Input required: `faculty` under which the student wishes to register
 * provides facility to `unsubscribe` from the course if the student is already subscribed
 
+## no-gui 
+
+**'nogui': true** needs to be passed within the JSON body to get proper response while accessing endpoints.
+**auth_token** will be received as a response to the `/login` call. It needs to be passed as part of the JSON while accessing other endpoints. 
+
+- `/login`:  Starts a new session for the user and returns `auth_token`. 
+	Required: `username`, `password`
+    
+- `/addUser`: Accessible only by admin (designation = 2). Creates a new user.
+Required:  `auth_token`, `username`,  `name`, `password`, `designation`
+The `auth_token` is used to determine the designation of active user.
+Returns relevant error messages if validation fails or duplicate username scenario.
+
+- `/delUser`: Accessible only by admin (designation = 2). Deletes an existing user.
+Required:  `auth_token`, `username`
+The `auth_token` is used to determine the designation of active user.
+Returns relevant error messages if validation fails or username doesn't exist.
+    
+- `/course`:  Returns details (code, description, start date, duration in months, status, registrations under each faculty) for the requested course.
+Required: `auth_token`, `courseCode`.
+Returns relevant error messages if validation fails or course doesn't exist.
+    
+- `/add`:  Accessible only by faculty (designation = 1) and admin (designation = 2). Adds a course to the database. 
+Required: `auth_token`,  `courseCode`,  `courseDesc`,  `courseStartDate`, `courseDuration`.
+If course code already exists, the faculty is added to the registered instructors list for the course and relevant message is returned.
+Returns relevant error messages if validation fails.
+
+- `/participate`:  Accessible by faculty (designation = 1). Adds faculty to the registered instructors list for the course 
+Required: `auth_token`,  `courseCode`
+Returns relevant error messages if validation fails or course doesn't exist.
+    
+- `/delete`: Accessible only by registered faculty for the course. If this is the only registered faculty - the course record is deleted along with all registrations. Otherwise, faculty is removed from the list of registered faculties along with all registrations under the faculty.
+Required: `auth_token`,  `courseCode`
+Returns relevant error messages if validation fails or course doesn't exist.
+    
+- `/subscribe`: Accessible only by student (designation = 0). Subscribes a student to a course. 
+Required:  `auth_token`, `courseCode`
+Returns relevant error messages if validation fails or the course start date has passed.
+    
+- `/unsubscibe`: Accessible only by student (designation = 0). Unsubscribes a student from a course.
+Required:  `auth_token`, `courseCode`
+Returns relevant error messages if validation fails or the course start date has passed.
+
+- `/logout`: Ends the session. 
+Required: `auth_token`
+
+- `/`: Returns a list of all possible API endpoints. 
+
 
