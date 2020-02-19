@@ -19,27 +19,42 @@ var user_details = {
         'designation': 2
     },
     'faculty1': {
-        'name': 'Dr. Sridevi',
+        'name': 'Prof. A',
         'password': '1234',
         'designation': 1
     },
     'faculty2': {
-        'name': 'Dr. Prabhakar',
+        'name': 'Dr. B',
+        'password': '1234',
+        'designation': 1
+    },
+    'faculty3': {
+        'name': 'Prof. C',
         'password': '1234',
         'designation': 1
     },
     'student1': {
-        'name': 'Rajitha',
+        'name': 'Geek',
         'password': '1234',
         'designation': 0
     },
     'student2': {
-        'name': 'Ramesh',
+        'name': 'Ash',
         'password': '1234',
         'designation': 0
     },
     'student3': {
-        'name': 'Mohan',
+        'name': 'Buck',
+        'password': '1234',
+        'designation': 0
+    },
+    'student4': {
+        'name': 'Thermite',
+        'password': '1234',
+        'designation': 0
+    },
+    'student5': {
+        'name': 'Thatcher',
         'password': '1234',
         'designation': 0
     }
@@ -51,30 +66,46 @@ var course_details = {
         'desc': "Problem Solving",
         'professors': ['faculty1', 'faculty2'],
         'startDate': new Date("2020-02-20"),
-        'duration': 30
+        'duration': 3
     },
     'CSE1002': {
+        'desc': "Object Oriented Programming",
+        'professors': ['faculty1', 'faculty2'],
+        'startDate': new Date("2020-02-21"),
+        'duration': 4
+    },
+    'CSE2001': {
         'desc': "Data Structures and Algorithms",
         'professors': ['faculty1'],
         'startDate': new Date("2020-02-21"),
-        'duration': 60
+        'duration': 4
+    },
+    'CSE4011': {
+        'desc': "Image Processing",
+        'professors': ['faculty3'],
+        'startDate': new Date("2020-02-21"),
+        'duration': 4
     }
 }
 
 var registrations = {
-    'CSE1001': { 'faculty1': ['student1', 'student2'], 'faculty2': ['student3'] },
-    'CSE1002': { 'faculty1': ['student1', 'student3'] },
+    'CSE1001': { 'faculty1': ['student1', 'student2'], 'faculty2': ['student3', 'student4'] },
+    'CSE1002': { 'faculty1': ['student1', 'student3'], 'faculty2': ['student2'] },
+    'CSE2001': { 'faculty1': ['student3', 'student5'] },
+    'CSE4011': { 'faculty3': ['student4', 'student5'] },
 }
 
 
 var sessions = {}
 
-const auth_token_authenticator = joi.string().length(26).required()
-const courseCode_authenticator = joi.string().regex(/^[A-Z]{3}[0-9]{4}$/).required()
+const auth_token_auth = joi.string().length(20).required()
+const courseCode_auth = joi.string().regex(/^[A-Z]{3}[0-9]{4}$/).required()
 
+
+// Validators for request body input
 const validators = {
     'authorized': {
-        'auth_token': auth_token_authenticator
+        'auth_token': auth_token_auth
     },
     'login': {
         'username': joi.string().required(),
@@ -82,43 +113,43 @@ const validators = {
         'nogui': joi.boolean()
     },
     'addUser': {
-        'auth_token': auth_token_authenticator,
+        'auth_token': auth_token_auth,
         'username': joi.string().required(),
         'name': joi.string().required(),
-        'password': joi.string().required().length(4),
+        'password': joi.string().required().min(4, 'utf8'),
         'designation': joi.number().required(),
         'nogui': joi.boolean()
     },
     'delUser': {
-        'auth_token': auth_token_authenticator,
+        'auth_token': auth_token_auth,
         'userId': joi.string().required(),
         'nogui': joi.boolean()
     },
     'addCourse': {
-        'auth_token': auth_token_authenticator,
-        'courseCode': courseCode_authenticator,
+        'auth_token': auth_token_auth,
+        'courseCode': courseCode_auth,
         'courseDesc': joi.string().required(),
-        'courseStartDate': joi.date().required(),
+        'courseStartDate': joi.date().greater(Date.now()).required(),
         'courseDuration': joi.number().required(),
         'nogui': joi.boolean()
     },
     'courseDetails': {
-        'auth_token': auth_token_authenticator,
-        'courseCode': courseCode_authenticator,
+        'auth_token': auth_token_auth,
+        'courseCode': courseCode_auth,
         'courseProfs': joi.string(),
         'prof': joi.string(),
         'nogui': joi.boolean()
     },
     'subscribeCourse': {
-        'auth_token': auth_token_authenticator,
-        'courseCode': courseCode_authenticator,
+        'auth_token': auth_token_auth,
+        'courseCode': courseCode_auth,
         'prof': joi.string().required(),
         'nogui': joi.boolean()
     }
 }
 
 
-//Utility Function - for validating request body
+// Utility Function - for validating request body
 var validateRequest = function requestValidation(reqBody, validator) {
     const promise = new Promise(function (resolve, reject) {
         const result = joi.validate(reqBody, validators[validator])
@@ -132,7 +163,7 @@ var validateRequest = function requestValidation(reqBody, validator) {
     return promise
 }
 
-//Utility Function - for checking if record exists in data
+// Utility Function - for checking if record exists in data
 var hasRecord = function findRecord(data, record) {
     const promise = new Promise(function (resolve, reject) {
         if (!(_.has(data, record))) {
@@ -145,9 +176,9 @@ var hasRecord = function findRecord(data, record) {
     return promise
 }
 
-
+// Utility Function - to generate Auth Token
 function generateAuthToken() {
-    return Math.random().toString(36).substring(2, 15).padEnd(13) + Math.random().toString(36).substring(2, 15).padEnd(13);
+    console.log((Math.random(0).toString(36).substr(2) + Math.random(0).toString(36).substr(2)).substr(0, 20))
 }
 
 // function to generate variables required for rendering home
@@ -166,7 +197,7 @@ function homeRenderData(current_user) {
             'courseDesc': course['desc'],
             'courseProfs': course['professors'],
             'courseDuration': course['duration'],
-            'registrations': JSON.stringify(registrations[courseCode])
+            'registrations': registrations[courseCode]
         })
     })
 
@@ -329,7 +360,7 @@ app.post('/addUser', (req, res) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = error.details[0].message
-            if (result.nogui) {
+            if (error._object.nogui) {
                 res.send(responseData)
             }
             else {
@@ -416,7 +447,7 @@ app.post('/delUser', (req, res) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = error.details[0].message
-            if (result.nogui) {
+            if (error._object.nogui) {
                 res.send(responseData)
             }
             else {
@@ -555,7 +586,7 @@ app.post('/course', (req, res) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = "Select a valid option!"
-            if (result.nogui) {
+            if (error._object.nogui) {
                 res.send(responseData)
             }
             else {
@@ -627,7 +658,7 @@ app.post('/add', (req, res) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = error.details[0].message
-            if (result.nogui) {
+            if (error._object.nogui) {
                 res.send(responseData)
             }
             else {
@@ -710,7 +741,7 @@ app.post('/delete', (req, res) => {
         })
         .catch(() => {
             var responseData = { 'message': "Oops! Something went wrong. Please Try Again." }
-            if (result.nogui) {
+            if (error._object.nogui) {
                 res.send(responseData)
             }
             else {
@@ -761,7 +792,7 @@ app.post('/participate', (req, res) => {
         })
         .catch((error) => {
             var responseData = { 'message': "Oops! Something went wrong. Please Try Again." }
-            if (result.nogui) {
+            if (error._object.nogui) {
                 res.send(responseData)
             }
             else {
@@ -838,7 +869,7 @@ app.post('/subscribe', (req, res) => {
             var responseData = homeRenderData(sessions[error._object.auth_token])
             responseData['auth_token'] = error._object.auth_token
             responseData['message'] = "Oops! Try Again. You need to select a faculty for subscribing to a course."
-            if (result.nogui) {
+            if (error._object.nogui) {
                 res.send(responseData)
             }
             else {
@@ -905,7 +936,7 @@ app.post('/unsubscribe', (req, res) => {
         })
         .catch(() => {
             var responseData = { 'message': "Oops! Something went wrong. Please Try Again." }
-            if (result.nogui) {
+            if (error._object.nogui) {
                 res.send(responseData)
             }
             else {
@@ -915,9 +946,7 @@ app.post('/unsubscribe', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    var responseData = { 'available endpoints': ['/login', '/addUser', '/delUser', '/logout', '/course', '/add', '/delete', '/participate', '/subscribe', '/unsubscribe'] }
-    res.send(responseData)
-    res.render('landing')
+        res.render('landing')
 })
 
 app.get('*', (req, res) => {

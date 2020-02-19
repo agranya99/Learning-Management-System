@@ -76,7 +76,11 @@ html
                                 td
                                     span #{course.courseDuration}
                                 td
-                                    span #{course.registrations}
+                                    if course.registrations
+                                        each arr, index in course.registrations
+                                            span || #{index} : 
+                                            each val in arr
+                                                span #{val} . 
 
 
             else if designation == 1
