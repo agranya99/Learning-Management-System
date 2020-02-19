@@ -1,0 +1,49 @@
+{
+"user_details" : {
+    "admin": {
+        "name": "Admin",
+        "password": "1234",
+        "designation": 2
+    },
+    "faculty1": {
+        "name": "Prof. A",
+        "password": "1234",
+        "designation": 1
+    },
+    "faculty2": {
+        "name": "Dr. B",
+        "password": "1234",
+        "designation": 1
+    },
+    "faculty3": {
+        "name": "Prof. C",
+        "password": "1234",
+        "designation": 1
+    },
+    "student1": {
+        "name": "Geek",
+        "password": "1234",
+        "designation": 0
+    },
+    "student2": {
+        "name": "Ash",
+        "password": "1234",
+        "designation": 0
+    },
+    "student3": {
+        "name": "Buck",
+        "password": "1234",
+        "designation": 0
+    },
+    "student4": {
+        "name": "Thermite",
+        "password": "1234",
+        "designation": 0
+    },
+    "student5": {
+        "name": "Thatcher",
+        "password": "1234",
+        "designation": 0
+    }
+}
+}

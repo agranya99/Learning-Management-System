@@ -1,6 +1,7 @@
 const express = require('express')
 const joi = require('joi')
 var _ = require('lodash');
+var data = require('./data/user_data.json')
 
 const app = express()
 app.use(express.json())
@@ -12,78 +13,31 @@ app.set('view engine', 'pug')
 
 const portNumber = 8080
 
-var user_details = {
-    'admin': {
-        'name': 'Admin',
-        'password': '1234',
-        'designation': 2
-    },
-    'faculty1': {
-        'name': 'Prof. A',
-        'password': '1234',
-        'designation': 1
-    },
-    'faculty2': {
-        'name': 'Dr. B',
-        'password': '1234',
-        'designation': 1
-    },
-    'faculty3': {
-        'name': 'Prof. C',
-        'password': '1234',
-        'designation': 1
-    },
-    'student1': {
-        'name': 'Geek',
-        'password': '1234',
-        'designation': 0
-    },
-    'student2': {
-        'name': 'Ash',
-        'password': '1234',
-        'designation': 0
-    },
-    'student3': {
-        'name': 'Buck',
-        'password': '1234',
-        'designation': 0
-    },
-    'student4': {
-        'name': 'Thermite',
-        'password': '1234',
-        'designation': 0
-    },
-    'student5': {
-        'name': 'Thatcher',
-        'password': '1234',
-        'designation': 0
-    }
-
-}
+var user_details = data['user_details']
 
 var course_details = {
     'CSE1001': {
         'desc': "Problem Solving",
         'professors': ['faculty1', 'faculty2'],
-        'startDate': new Date("2020-02-20"),
+        'startDate': new Date("2020-03-01"),
         'duration': 3
     },
     'CSE1002': {
         'desc': "Object Oriented Programming",
         'professors': ['faculty1', 'faculty2'],
-        'startDate': new Date("2020-02-21"),
+        'startDate': new Date("2020-03-01"),
         'duration': 4
     },
     'CSE2001': {
         'desc': "Data Structures and Algorithms",
         'professors': ['faculty1'],
-        'startDate': new Date("2020-02-21"),
+        'startDate': new Date("2020-02-20"),
         'duration': 4
     },
     'CSE4011': {
         'desc': "Image Processing",
         'professors': ['faculty3'],
-        'startDate': new Date("2020-02-21"),
+        'startDate': new Date("2020-03-01"),
         'duration': 4
     }
 }
@@ -196,6 +150,7 @@ function homeRenderData(current_user) {
             'courseCode': courseCode,
             'courseDesc': course['desc'],
             'courseProfs': course['professors'],
+            'startDate': course['startDate'],
             'courseDuration': course['duration'],
             'registrations': registrations[courseCode]
         })
