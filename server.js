@@ -178,7 +178,7 @@ var hasRecord = function findRecord(data, record) {
 
 // Utility Function - to generate Auth Token
 function generateAuthToken() {
-    console.log((Math.random(0).toString(36).substr(2) + Math.random(0).toString(36).substr(2)).substr(0, 20))
+    return ((Math.random(0).toString(36).substr(2) + Math.random(0).toString(36).substr(2)).substr(0, 20))
 }
 
 // function to generate variables required for rendering home
