@@ -1,6 +1,7 @@
 # Learning-Management-System
 ### PayPal VAP 2020 Mini-Project 1
-A system developed using `Node.Js` and `Pug` for universities to facilitate management of courses. The system supports `admin`, `faculty` and `student` user types. It supports API requests via `no-gui` interface. 
+A system developed using `Node.Js` and `Pug` for universities to facilitate management of courses. The system supports `admin`, `faculty` and `student` user types. The **admin** can `createUser` and `delUser` where user can have designation = 1 (faculty) or designation = 0 (student). The **faculty** can `create` course, `participate` in existing course, `delete` registration from course. The **student** can `subscribe` and `unsubscibe` to the courses. Necessary validations are performed and relevant messages are returned.
+It supports API requests via `no-gui` interface. 
 
 ## How to Run
 
@@ -76,7 +77,8 @@ Input required: `faculty` under which the student wishes to register
 ## no-gui 
 
 **'nogui': true** needs to be passed within the JSON body to get proper response while accessing endpoints.
-**auth_token** will be received as a response to the `/login` call. It needs to be passed as part of the JSON while accessing other endpoints. 
+**`auth_token` will be received as a response to the `/login` call. It needs to be passed as part of the JSON while accessing other endpoints.**
+`message` field in the response includes relevant messages.
 
 - `/login`:  Starts a new session for the user and returns `auth_token`. 
 	Required: `username`, `password`
