@@ -77,7 +77,9 @@ Input required: `faculty` under which the student wishes to register
 ## no-gui 
 
 **'nogui': true** needs to be passed within the JSON body to get proper response while accessing endpoints.
+
 **`auth_token` will be received as a response to the `/login` call. It needs to be passed as part of the JSON while accessing other endpoints.**
+
 `message` field in the response includes relevant messages.
 
 - `/login`:  Starts a new session for the user and returns `auth_token`. 
